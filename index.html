@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GANASENA Donation Receipt</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eee;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 36px;
+      color: #b03a2e;
+      letter-spacing: 1px;
+    }
+
+    .header h2 {
+      margin: 4px 0;
+      font-size: 20px;
+      color: #333;
+      font-weight: normal;
+    }
+
+    .form-container {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 420px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    }
+
+    fieldset {
+      border: none;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 0;
+    }
+
+    legend {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #b03a2e;
+    }
+
+    label {
+      text-align: left;
+      font-weight: bold;
+      font-size: 15px;
+      color: #444;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    input:focus {
+      border-color: #b03a2e;         
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #b03a2e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #922b21;
+    }
+
+    .receipt {
+      position: relative;
+      width: 1024px;
+      height: 724px;
+      background: url('template.jpg') no-repeat;
+      background-size: cover;
+      margin: 30px auto;
+      display: none;
+    }
+
+    .text {
+      position: absolute;
+      color: #f5deb3;
+      font-size: 28px;
+      font-weight: bold;
+      font-family: Georgia, serif;
+      white-space: nowrap;
+    }
+
+    #nameOutput {
+      top: 344px;
+      left: 295px;
+    }
+
+    #dateOutput {
+      top: 448px;
+      left: 295px;
+    }
+
+    #amountOutput {
+      top: 550px;
+      left: 320px;
+      font-size: 30px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .btn-group {
+      display: none;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-group button {
+      width: auto;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header">
+    <h1>GANASENA</h1>
+    <h2>YOUTH ASSOCIATION</h2>
+    <h2>RAMNAGAR, KARIMNAGAR – 505001</h2>
+  </div>
+
+  <!-- Donation Form -->
+  <div class="form-container">
+    <fieldset>
+      <legend>Donation Entry</legend>
+
+      <label for="name">Donor Name</label>
+      <input type="text" id="name" placeholder="Enter Donor Name" required>
+
+      <label for="date">Date</label>
+      <input type="date" id="date" required>
+
+      <label for="amount">Amount (₹)</label>
+      <input type="number" id="amount" placeholder="Enter Amount" required>
+
+      <button onclick="generate()">Generate Receipt</button>
+    </fieldset>
+  </div>
+
+  <!-- Receipt Preview -->
+  <div class="receipt" id="receipt">
+    <div class="text" id="nameOutput"></div>
+    <div class="text" id="dateOutput"></div>
+    <div class="text" id="amountOutput"></div>
+  </div>
+
+  <!-- Download Button -->
+  <div class="btn-group" id="actions">
+    <button onclick="downloadReceipt()">📥 Download</button>
+  </div>
+
+  <!-- Load html2canvas -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <script>
+    function generate() {
+      const name = document.getElementById('name').value.trim();
+      const date = document.getElementById('date').value;
+      const amount = document.getElementById('amount').value.trim();
+
+      if (!name || !date || !amount) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      document.getElementById('nameOutput').textContent = name;
+      document.getElementById('dateOutput').textContent = date;
+      document.getElementById('amountOutput').textContent = '₹' + amount;
+
+      document.getElementById('receipt').style.display = 'block';
+      document.getElementById('actions').style.display = 'flex';
+
+      setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 300);
+    }
+
+    function downloadReceipt() {
+      const receiptElement = document.getElementById("receipt");
+
+      html2canvas(receiptElement, {
+        allowTaint: true,
+        useCORS: true,
+        backgroundColor: null
+      }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "Ganasena_Receipt.png";
+        link.href = canvas.toDataURL("image/png");
+
+        // Append link, trigger click, then remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }).catch(error => {
+        alert("Error generating receipt: " + error);
+        console.error(error);
+      });
+    }
+  </script>
+
+</body>
+</html>
