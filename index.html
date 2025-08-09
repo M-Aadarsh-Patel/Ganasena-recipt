@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GANASENA Donation Receipt</title>
   <style>
     body {
@@ -9,6 +10,7 @@
       background: #eee;
       text-align: center;
       padding: 20px;
+      margin: 0;
     }
 
     .header {
@@ -34,6 +36,7 @@
       padding: 25px;
       border-radius: 12px;
       max-width: 420px;
+      width: 100%;
       margin: auto;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
     }
@@ -90,9 +93,10 @@
 
     .receipt {
       position: relative;
-      width: 1024px;
-      height: 724px;
-      background: url('template.jpg') no-repeat;
+      width: 100%;
+      max-width: 1024px;
+      aspect-ratio: 1024 / 724;
+      background: url('template.jpg') no-repeat center;
       background-size: cover;
       margin: 30px auto;
       display: none;
@@ -101,27 +105,27 @@
     .text {
       position: absolute;
       color: #f5deb3;
-      font-size: 28px;
+      font-size: 2.7vw;
       font-weight: bold;
       font-family: Georgia, serif;
       white-space: nowrap;
     }
 
     #nameOutput {
-      top: 344px;
-      left: 295px;
+      top: 47%;
+      left: 29%;
     }
 
     #dateOutput {
-      top: 448px;
-      left: 295px;
+      top: 61%;
+      left: 29%;
     }
 
     #amountOutput {
-      top: 550px;
-      left: 320px;
-      font-size: 30px;
-      width: 300px;
+      top: 76%;
+      left: 31%;
+      font-size: 3vw;
+      width: 30%;
       text-align: center;
     }
 
@@ -135,6 +139,29 @@
     .btn-group button {
       width: auto;
       padding: 10px 20px;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .header h2 {
+        font-size: 16px;
+      }
+
+      legend {
+        font-size: 18px;
+      }
+
+      .text {
+        font-size: 4vw;
+      }
+
+      #amountOutput {
+        font-size: 5vw;
+      }
     }
   </style>
 </head>
@@ -213,7 +240,6 @@
         link.download = "Ganasena_Receipt.png";
         link.href = canvas.toDataURL("image/png");
 
-        // Append link, trigger click, then remove
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
